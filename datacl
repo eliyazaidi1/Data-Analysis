@@ -1,0 +1,173 @@
+import pandas as pd
+import numpy as np
+
+
+**Handling Missing Data**
+
+a = pd.Series(['Tesla', 'Tata', np.nan, 'audi'])
+
+a.isnull()
+
+The built-in Python None value is also treated as NA in object in arrays:
+a[1] = None
+
+a.isnull()
+
+from numpy import nan as NA
+data = pd.Series([10, NA, 30, NA, 40,50,NA])
+
+# Drop rows with minimum one NaN value
+data.dropna()
+
+# Alternative
+data[data.notnull()]
+
+data = pd.DataFrame([[1., 2., 3.], [1., NA, NA], [NA, NA, NA], [NA, 6.5, 3.]])
+
+cleaned = data.dropna()
+
+
+# Drop rows with all as NaN values
+data.dropna(how='all')
+
+data.dropna(how='all',inplace=True)
+
+data[3]=NA
+
+data.dropna(axis=1, how='all')
+
+**Another example**
+
+df = pd.DataFrame(np.random.randn(7, 5))
+
+df.iloc[:4,1] = NA
+df.iloc[:2, 2] = NA
+
+
+**thresh parameter**
+
+df.dropna(thresh=4)
+
+df.dropna()
+
+
+**replacing Nan values**
+df.fillna(0)
+
+Calling fillna with a dict, you can use a different fill value for each column
+
+df.fillna({1: 10, 2: 20})
+
+data.duplicated()
+
+**Transforming Data**
+
+import pandas as pd
+
+data = pd.DataFrame({'birds': ['crow', 'owl', 'peacock','sparrow', 'pigeon', 'hawk',
+'vulture', 'ostritch', 'parrot'],'lifespan': [10, 9, 20, 3, 15, 20, 10, 50, 50]})
+
+
+company_to_ceo = {
+'google': 'sunder pichai',
+'apple': 'tim cook',
+'tesla': 'elon musk',
+'microsoft': 'satya nadella',
+'meta': 'mark zuckerberg',
+'amazon': 'andy jassy'
+}
+
+lowercased = data['birds'].str.lower()
+
+data['ceo'] = lowercased.map(company_to_ceo)
+
+
+# Alternate
+data['birds'].map(lambda x: company_to_ceo[x.lower()])
+
+data.rename( columns=str.upper)
+
+
+**Data Replacing**
+
+data = pd.DataFrame([[1., 2., 3.], [1., 'NA', 'NA'], ['NA', 'NA', 'NA'], ['NA', 6.5, 3.]])
+
+data.replace('NA', 0)
+
+data.replace(['NA', 1], [0, 10])
+
+
+**Approach 1 Dummy Variables-**
+
+df = pd.DataFrame({'Bikes': ['Bike1', 'Bike2', 'Bike3', 'Bike4', 'Bike5', 'Bike6'],'gears': range(6)})
+
+pd.get_dummies(df['Bikes'])
+
+dummies = pd.get_dummies(df['Bikes'], prefix='Bikes')
+
+df_with_dummy = df[['gears']].join(dummies)
+
+**Eg2**
+
+data = pd.read_csv("/content/employee_data.csv")
+
+data.head(20)
+
+Checking the Labels in the column
+
+data['Gender'].unique()
+
+data['Remarks'].unique()
+
+Checking Count of each label
+
+data['Gender'].value_counts()
+
+data['Remarks'].value_counts()
+
+Binary Labelling with **1** at position where the label is present else **0**
+
+onehot_encoded_data = pd.get_dummies(data, columns=['Remarks', 'Gender'])
+
+**Approach 2 Label Encoder**
+
+from sklearn.preprocessing import LabelEncoder
+labelencoder_X = LabelEncoder()
+
+label_encoded_data = labelencoder_X.fit_transform(data['Remarks'])
+
+label_encoded_data = pd.DataFrame(data = label_encoded_data, columns = ['Remarks'])
+
+label_encoded_data['Remarks'].unique()
+
+df1 = pd.DataFrame({'Bikes': ['Bike2', 'Bike2', 'Bike1', 'Bike3', 'Bike1', 'Bike1','Bike2'],'gears1': range(7)})
+df2 = pd.DataFrame({'Bikes': ['Bike1', 'Bike2', 'Bike4'],'gears2': range(3)})
+
+pd.merge(df1, df2)
+
+**concat**
+
+s1 = pd.Series([0, 1], index=['a', 'b'])
+s2 = pd.Series([2, 3, 4], index=['c', 'd', 'e'])
+s3 = pd.Series([5, 6], index=['f', 'g'])
+
+pd.concat([s1, s2, s3])
+
+pd.concat([s1, s2, s3], axis=1)
+
+s4 = pd.concat([s1, s3])
+
+left_alignment = "Left Text"
+center_alignment = "Centered Text"
+right_alignment = "Right Text"
+
+print(f"{left_alignment : <20}{center_alignment : ^15}{right_alignment : >20}")
+print(f"{:*<20}")
+
+myString = "Scaler"
+myStr = f"Padded String with string on left and length 20 is: {'Scaler':*<20}"
+myStr = f"Padded String with string on left and length 20 is: {'Scaler':*>20}"
+myStr = f"Padded String with string on left and length 20 is: {'Scaler':*^20}"
+
+myStr = f"Padded String with string on left and length 20 is: {'Scaler':0^20}"
+
