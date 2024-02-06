@@ -1,0 +1,87 @@
+import numpy as np
+import pandas as pd
+
+df1 = pd.read_csv('/content/Districtwise_Basicdata (1).csv',skiprows = 1)
+
+df2 = pd.read_csv('/content/Districtwise_Enrollment_details_indicator (1).csv',skiprows =3)
+
+dfff = df2.assign(ColumnA = df2.Year.astype(str) + \
+  df2.Statecd.astype(str) +df2.distcd.astype(str))
+
+dfff.set_index('ColumnA',inplace=True)
+
+df3 = pd.read_csv('/content/Districtwise_Teacher_indicator (1).csv',skiprows =[0,1,2])
+
+dff = pd.merge()
+
+dff = df1.assign(ColumnA = df1.Year.astype(str) + \
+  df1.Statecd.astype(str) +df1.distcd.astype(str))
+
+dff = dff.set_index('ColumnA')
+
+TeamA = dff.merge(dfff, how='inner', on='ColumnA')
+
+TeamA['overall_lit'].isna().sum()
+
+TeamA = TeamA.dropna(subset=['overall_lit'])
+
+TeamA['overall_lit'].isna().sum()
+
+dffff = df3.assign(ColumnA = df3.ac_year.astype(str) + \
+  df3.statecd.astype(str) +df3.distcd.astype(str))
+
+dffff.set_index('ColumnA',inplace = True)
+
+TeamB = dff.merge(dffff,how='inner', on='ColumnA')
+
+TeamB['overall_lit'].isna().sum()
+
+TeamB = TeamB.dropna(subset=['overall_lit'])
+
+TeamB['overall_lit'].isna().sum()
+
+from sklearn.preprocessing import LabelEncoder
+le = LabelEncoder()
+led = le.fit_transform(TeamA['overall_lit'])
+
+TeamA['overall_lit']
+
+from sklearn.preprocessing import LabelEncoder
+le = LabelEncoder()
+ledd = le.fit_transform(TeamB['overall_lit'])
+
+TeamB['overall_lit']
+
+null_A = TeamA.columns[TeamA.isnull().any()]
+
+mean_A = TeamA.mean()
+
+null_B = TeamB.columns[TeamB.isnull().any()]
+
+mean_b = TeamB.mean()
+
+TeamA = TeamA.fillna(mean_A)
+
+TeamB.fillna(mean_b,inplace= True)
+
+TeamA_t= TeamA.T
+dupA= TeamA_t.duplicated()
+dupA_name = TeamA_t[dupA].index.tolist()
+
+TeamA = TeamA.drop(dupA_name,axis=1)
+
+TeamA.head()
+
+TeamB.duplicated()
+
+TeamB_t= TeamB.T
+dupB= TeamB_t.duplicated()
+dupB_name = TeamB_t[dupB].index.tolist()
+
+TeamB= TeamB.drop(dupB_name,axis=1)
+
+TeamB.head()
+
+TeamA.isna()
+
+TeamB.isna().sum()
