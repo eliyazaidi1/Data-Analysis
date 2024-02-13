@@ -1,0 +1,86 @@
+
+We will be using a fabricated dataset of user ratings for the movies to predict for recommendations
+
+# Task 1 - Loading and studying the data
+
+import numpy as np
+import pandas as pd
+
+df = pd.read_csv('/content/User_Movie_Ratings.csv',index_col='User')
+df
+
+
+# Task 2 - Extracting vectors from the data
+
+that are columns of dataset
+
+
+# Task 3 - Calculating dot products of vectors using
+
+a = df['Thor']
+b = df['The Notebook']
+np.dot(a,b)
+
+
+# Task 4 - Create a function to calculate magnitudes of vectors
+
+
+def mag(v1):
+   return np.sqrt(np.dot(v1,v1))
+
+d = df[df.columns].apply(mag)
+d.sort_values(ascending=False)
+
+d = pd.Series(d)
+type(d)
+
+u = df.apply(mag)
+u.sort_values(ascending = False)
+
+df.loc[df.index].apply(mag)
+
+# Task 5 - Print a sorted list of users in terms of how much they like movies in general
+
+us = df.T
+us = us.apply(mag)
+us.sort_values(ascending=False)
+
+
+# Task 6 - Create a function that returns the name of the movie that is most similar to a given movie
+
+def ang(v1,v2):
+
+    dot = np.sqrt(np.dot(v1,v2))
+
+    n1 = mag(v1)
+    n2 = mag(v2)
+
+    cos = (dot/(n1*n2))
+
+    angle = np.arccos(cos)
+    angle2 = np.degrees(angle)
+
+    return angle2
+
+
+h =ang(df['Thor'],df['Spiderman'])
+h
+
+D = pd.Series(index=df.columns)
+
+for i in D.index:
+    r = ang(df['Thor'], df[i])
+    D[i] = r
+    # print(f'Thor and {i} = {r}')
+
+D_sorted = D.sort_values(ascending=False)
+
+print("Sorted angles:")
+print(D_sorted)
+
+
+
+
+
+
+
