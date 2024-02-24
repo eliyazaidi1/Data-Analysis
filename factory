@@ -1,0 +1,72 @@
+###working with a simple dummy data set that contains factory production values of electrical machinery parts for a corporation.
+
+### **Task:**
+
+To Calculate Production values as per the days and existing infrastructure?
+
+import numpy as np
+import pandas as pd
+
+df = pd.read_csv('/content/Factory_Production.csv',index_col='Factory')
+df
+
+### **Task:**
+
+To Calculate Production values as per the days and existing infrastructure?
+
+# **Matrix Multiplication**
+
+
+#### Feature Description:
+This data set contains the production values of power units such as generators, motors and cables of different factories belonging to the same corporation.
+
+- Factory = unique label assigned to a factory unit for the purpose of identification
+- Generators = number of generators produced by the factory in a day
+- Motors = number of motors produced by the factory in a day
+- Cables = number of cables produced by the factory in a day
+- Days = number of working days of the factory in a year
+
+##### Study its features such as:
+- The number of factory units
+- The number of machine parts
+- The ranges of production values
+
+## Task 2 - Extract production values as a matrix from the data
+
+- The factory production values for each factory are contained in the "Generators", "Motors" and "Cables" features
+- These production values will form a 10 x 3 matrix (considering all factories)
+
+df_prod = df.drop('Days',axis=1)
+df_prod
+
+## Task 3 - Extract number of working days as a matrix from the data
+
+- The number of working days for each factory is stored in the "Days" column of the data frame "df"
+- These values will form a 10 x 1 matrix
+
+df_day = df['Days']
+df_day
+
+## Task 4 - Multiply matrices
+
+- The factory production values of generators, motors and cables of the 10 factories is a 10 x 3 matrix
+- The number of working days of all the factories is in the form of a 1 x 10 matrix
+- The product of these two matrices is equal to the linear combination of the production values vectors scaled by the number of working days
+
+A = np.matrix(df_prod)
+X = np.matrix(df_day)
+
+
+A.shape
+
+X.shape
+
+## Task 5 - Code a linear combination of vectors using addition and scalar multiplication
+
+- The vector of daily production values for a certain factory can be accessed from the data frame "df_prod".
+- The number of working days in a year for each factory can be extracted from the data frame "df".
+- The total production of a certain factory in a full year can be obtained using scalar multiplication.
+
+data = np.array(X@A)
+data = data.flatten()
+dp = pd.Series(data,index=df_prod.columns)
